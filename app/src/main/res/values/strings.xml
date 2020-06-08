@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FlightMobileApp</string>
+    <string name="edit_hint">Type URL...</string>
+    <string name="connect_button">Connect</string>
+    <string name="first_server">1st server</string>
+    <string name="second_server">2st server</string>
+    <string name="third_server">3st server</string>
+    <string name="fourth_server">4st server</string>
+    <string name="fifth_server">5st server</string>
+    <string name="title">Recently used servers</string>
 </resources>
