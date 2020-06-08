@@ -1,22 +1,22 @@
 package com.example.flightmobileapp
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.util.LruCache
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.room.RoomDatabase
+import androidx.appcompat.app.AppCompatActivity
+
+//import androidx.room.RoomDatabase
 
 class MainActivity : AppCompatActivity() {
+    //private var rdb : RoomDatabase? = null
     private lateinit var server1 : TextView
     private lateinit var server2 : TextView
     private lateinit var server3 : TextView
     private lateinit var server4 : TextView
     private lateinit var server5 : TextView
-    private var rdb : RoomDatabase? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,29 +33,13 @@ class MainActivity : AppCompatActivity() {
 
     fun connectButtonOnClick(view: View) {
         val url = findViewById(R.id.url_edit_text) as EditText
-        val server = findViewById(R.id.server1) as TextView
-        server1.setText(url.text);
-        ////va r size = cache.size();
-        //cache.put(url.toString(), 1000);
-        //var list = cache.snapshot();
-        //var i = size;
-//        for(item in list) {
-//            if(i == 1) {
-//                view.findViewById<TextView>(R.id.server1).text = "edrf"
-//            }
-//            if(i == 2) {
-//                view.findViewById<TextView>(R.id.server2).text = item.key.toString()
-//            }
-//            if(i == 3) {
-//                view.findViewById<TextView>(R.id.server3).text = item.key.toString()
-//            }
-//            if(i == 4) {
-//                view.findViewById<TextView>(R.id.server4).text = item.key.toString()
-//            }
-//            if(i == 5) {
-//                view.findViewById<TextView>(R.id.server5).text = item.key.toString()
-//            }
-//            i--;
-//        }
+        server1.setText(url.text)
+
+
+        val intent = Intent(baseContext, JoystickActivity::class.java)
+//        intent.putExtra("ip", ipFromUser.getText().toString())
+//        intent.putExtra("port", portFromUser.getText().toString())
+        startActivity(intent)
+
     }
 }
