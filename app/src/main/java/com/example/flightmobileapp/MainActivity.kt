@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     //private var rdb : RoomDatabase? = null
-    private lateinit var server1 : TextView
-    private lateinit var server2 : TextView
-    private lateinit var server3 : TextView
-    private lateinit var server4 : TextView
-    private lateinit var server5 : TextView
+    private lateinit var server1: TextView
+    private lateinit var server2: TextView
+    private lateinit var server3: TextView
+    private lateinit var server4: TextView
+    private lateinit var server5: TextView
 
     private lateinit var urlViewModel: UrlViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = UrlListAdapter(this)
+        val adapter = UrlListAdapter(this,{url: Url -> updateEditText(url)})
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         urlViewModel = ViewModelProvider(this).get(UrlViewModel::class.java)
@@ -53,11 +53,9 @@ class MainActivity : AppCompatActivity() {
 
     fun connectButtonOnClick(view: View) {
         val editTextString = findViewById<EditText>(R.id.url_edit_text).text.toString()
-
         if (TextUtils.isEmpty(editTextString)) {
             Toast.makeText(this, "You did not enter a URL", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             val url = Url(editTextString)
             urlViewModel.insert(url)
             urlViewModel.updateNumbers()
@@ -69,5 +67,12 @@ class MainActivity : AppCompatActivity() {
 //        intent.putExtra("port", portFromUser.getText().toString())
         //startActivity(intent)
 
+    }
+
+    fun updateEditText(url: Url) {
+        var editTextString = findViewById<EditText>(R.id.url_edit_text)
+        editTextString.setText(url.url)
+        urlViewModel.insert(Url(url.url))
+        urlViewModel.updateNumbers()
     }
 }
