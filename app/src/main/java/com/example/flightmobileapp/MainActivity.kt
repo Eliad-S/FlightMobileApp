@@ -49,12 +49,16 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.connect_button).setOnClickListener {
             connectButtonOnClick(it)
         }
+
+
     }
+
+
 
     fun connectButtonOnClick(view: View) {
         val editTextString = findViewById<EditText>(R.id.url_edit_text).text.toString()
         if (TextUtils.isEmpty(editTextString)) {
-            Toast.makeText(this, "You did not enter a URL", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You did not enter a URL", Toast.LENGTH_SHORT).show()
         } else {
             val url = Url(editTextString)
             urlViewModel.insert(url)
@@ -62,8 +66,8 @@ class MainActivity : AppCompatActivity() {
             //server1.setText(url.text)
         }
 
-        val intent = Intent(baseContext, JoystickActivity::class.java)
-        //startActivity(intent)
+        val intent = Intent(baseContext, SlidersActivity::class.java)
+        startActivity(intent)
 
     }
 

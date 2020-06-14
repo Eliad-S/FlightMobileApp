@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SlidersActivity">
 
     <SeekBar
         android:id="@+id/seekBar3"
         android:layout_width="247dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="52dp"
         android:max="200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.707"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -25,64 +26,62 @@
         android:textColor="@color/tiffanyBlue"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar3"
+        app:layout_constraintEnd_toStartOf="@+id/textView5"
+        app:layout_constraintHorizontal_bias="0.908"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.996"
         tools:ignore="MissingConstraints" />
 
     <SeekBar
         android:id="@+id/seekBar4"
         android:layout_width="247dp"
         android:layout_height="34dp"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="190dp"
+        android:layout_marginBottom="244dp"
         android:max="100"
         android:rotation="270"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/joystickView"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="93dp"
-        android:layout_height="38dp"
+        android:layout_width="64dp"
+        android:layout_height="23dp"
         android:layout_marginEnd="220dp"
-        android:text="Throttle"
-        android:textColor="@color/tiffanyBlue"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        android:text="Throttle:"
+        app:layout_constraintBottom_toTopOf="@+id/throttleText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.893"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/throttleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="220dp"
         android:layout_marginBottom="100dp"
-        android:background="@color/mellowApricot"
-        android:shadowColor="#000000"
-        android:text="value"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:gravity="center"
+        android:text="0"
         app:layout_constraintBottom_toTopOf="@+id/seekBar4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/throttleText"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="49dp"
         android:layout_height="26dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/mellowApricot"
         android:shadowColor="#000000"
         android:text="value"
@@ -91,6 +90,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/seekBar3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.687"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -111,12 +111,84 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="290dp"
         android:layout_marginTop="11dp"
-        android:text="Back"
         android:background="@color/mellowApricot"
         android:shadowColor="#000000"
+        android:text="Back"
         android:textColor="@color/white"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.848"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.989" />
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/joystickView"
+        android:layout_width="264dp"
+        android:layout_height="292dp"
+        app:JV_backgroundColor="#009688"
+        app:JV_borderColor="#00796B"
+        app:JV_borderWidth="4dp"
+        app:JV_buttonColor="#252322"
+        app:JV_buttonSizeRatio="25%"
+        app:JV_fixedCenter="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.673"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.225" />
+
+    <TextView
+        android:id="@+id/aileronText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aileron:"
+        app:layout_constraintBottom_toBottomOf="@+id/joystickView"
+        app:layout_constraintEnd_toEndOf="@+id/joystickView"
+        app:layout_constraintHorizontal_bias="0.43"
+        app:layout_constraintStart_toStartOf="@+id/joystickView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.171" />
+
+    <TextView
+        android:id="@+id/aileron"
+        android:layout_width="31dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="80dp"
+        android:gravity="center"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/joystickView"
+        app:layout_constraintEnd_toEndOf="@+id/joystickView"
+        app:layout_constraintHorizontal_bias="0.707"
+        app:layout_constraintStart_toEndOf="@+id/aileronText"
+        app:layout_constraintTop_toTopOf="@+id/joystickView"
+        app:layout_constraintVertical_bias="0.036" />
+
+    <TextView
+        android:id="@+id/elevatorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:text="Elevator:"
+        app:layout_constraintBottom_toBottomOf="@+id/elevator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.949"
+        app:layout_constraintStart_toStartOf="@+id/joystickView"
+        app:layout_constraintTop_toTopOf="@+id/joystickView"
+        app:layout_constraintVertical_bias="0.485" />
+
+    <TextView
+        android:id="@+id/elevator"
+        android:layout_width="53dp"
+        android:layout_height="16dp"
+        android:text="0"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.957"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/elevatorText"
+        app:layout_constraintVertical_bias="0.046" />
 </androidx.constraintlayout.widget.ConstraintLayout>
