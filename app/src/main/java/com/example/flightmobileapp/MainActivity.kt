@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val intent = Intent(baseContext, JoystickActivity::class.java)
-//        intent.putExtra("ip", ipFromUser.getText().toString())
-//        intent.putExtra("port", portFromUser.getText().toString())
         //startActivity(intent)
 
     }

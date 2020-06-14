@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <Button
         android:id="@+id/connect_button"
         android:layout_width="wrap_content"
@@ -13,7 +14,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/mellowApricot"
-        android:onClick="UrlOnClick"
+        android:onClick="connectButtonOnClick"
         android:shadowColor="#000000"
         android:text="@string/connect_button"
         android:textColor="@color/white"

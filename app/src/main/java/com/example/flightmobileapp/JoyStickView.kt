@@ -1,5 +1,3 @@
-package com.example.flightmobileapp
-
 import android.content.Context
 import android.graphics.Paint
 import android.util.AttributeSet
@@ -8,7 +6,6 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import android.view.View.OnTouchListener
-
 
 // The Joystick Surface view.
 class JoyStickView : SurfaceView, SurfaceHolder.Callback, OnTouchListener {
@@ -98,7 +95,6 @@ class JoyStickView : SurfaceView, SurfaceHolder.Callback, OnTouchListener {
 
     // The function is called when a touch event occurs.
     override fun onTouch(v: View, e: MotionEvent): Boolean {
-        if (v == this) {
             if (v == this) {
                 if (e.action != MotionEvent.ACTION_UP) {
                     val displacement = Math.sqrt(
@@ -125,7 +121,6 @@ class JoyStickView : SurfaceView, SurfaceHolder.Callback, OnTouchListener {
                     DrawJoystick(centerOfX, centerOfY)
                     JoystickCollable!!.onJoystickMoved(0f, 0f, id)
                 }
-            }
         } else {
             DrawJoystick(centerOfX, centerOfY)
         }
