@@ -66,4 +66,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
 
+    def coroutines_version = "1.2.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:x.x.x"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:x.x.x"
 }
