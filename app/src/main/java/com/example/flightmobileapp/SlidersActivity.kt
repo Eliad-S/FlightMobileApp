@@ -29,6 +29,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.lang.Math.abs
 
 class SlidersActivity : AppCompatActivity(){
     // sliders
@@ -59,10 +60,11 @@ class SlidersActivity : AppCompatActivity(){
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
                 val rudder = (i.toDouble() - 100) / 100
+                realRudder = rudder
                 textView5.text = "$rudder"
-                if ((realRudder - lastSendRudder) >= 0.02) {
+                if (kotlin.math.abs(realRudder - lastSendRudder) >= 0.02) {
                     // update server
-                    realRudder = rudder
+                    lastSendRudder = rudder
                     CoroutineScope(IO).launch { setCommand() }
                 }
             }
@@ -82,9 +84,10 @@ class SlidersActivity : AppCompatActivity(){
                 // Display the current progress of SeekBar
                 val throttle = i.toDouble() / 100
                 throttleText.text = "$throttle"
-                if ((realThrottle - lastSendThrottle) >= 0.01) {
+                realThrottle = throttle;
+                if (kotlin.math.abs(realThrottle - lastSendThrottle) >= 0.01) {
                     // update server
-                    realThrottle = throttle
+                    lastSendThrottle = realThrottle;
                     CoroutineScope(IO).launch { setCommand() }
                 }
             }
@@ -111,11 +114,7 @@ class SlidersActivity : AppCompatActivity(){
     }
 
     fun setCommand() {
-        lastSendRudder = realRudder
-        lastSendThrottle = realThrottle
-        lastSendAileron = realAileron
-        lastSendElevator = realElevator
-        val json: String = "{\n" + " \"aileron\": " + realAileron + ",\n" + " \"rudder\": " + realRudder + ",\n" + " \"elevator\": " + realElevator + ",\n" + " \"throttle\": " + realThrottle + "\n}"
+        val json: String = "{\n" + " \"aileron\": " + lastSendAileron + ",\n" + " \"rudder\": " + lastSendRudder + ",\n" + " \"elevator\": " + lastSendElevator + ",\n" + " \"throttle\": " + lastSendThrottle + "\n}"
         val rb: RequestBody = RequestBody.create(MediaType.parse("application/json"), json)
         val gson = GsonBuilder()
             .setLenient()
@@ -128,12 +127,16 @@ class SlidersActivity : AppCompatActivity(){
         val body = api.post(rb).enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
             }
-
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
                     Log.d("FlightMobileApp", response.body().toString())
+                    println("make the update correctly")
+
                 }
-                catch (e: IOException) {e.printStackTrace()}
+                catch (e: IOException) {
+                    e.printStackTrace()
+                    println("failed to make any post: catch")
+                }
             }
         })
     }
@@ -152,13 +155,13 @@ class SlidersActivity : AppCompatActivity(){
             var isChange = false
             if (difference / 2 > 0.01) {
                 // set aileron
-                realAileron = aileron
+                lastSendAileron = aileron
                 isChange = true
             }
             difference = kotlin.math.abs(elevator - lastSendElevator)
             if (difference / 2 > 0.01) {
                 // set elevator
-                realElevator = elevator
+                lastSendElevator = elevator
                 isChange = true
             }
             if (isChange) {
@@ -168,8 +171,7 @@ class SlidersActivity : AppCompatActivity(){
     }
 
 
-    private suspend fun  getSimulatorScreen() {
-        var flag = 0
+    private  fun  getSimulatorScreen() {
         var bitmapStream: Bitmap? = null
         val gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder().baseUrl(this.url.toString())
@@ -189,18 +191,11 @@ class SlidersActivity : AppCompatActivity(){
                 response: Response<ResponseBody>
             ) {
                 val imgStream = response.body()?.byteStream()
-                 bitmapStream = BitmapFactory.decodeStream(imgStream)
-                flag = 1
-//                withContext(Main) {  imageView.setImageBitmap(bitmapStream) }
-//                runOnUiThread {
-//                    imageView.setImageBitmap(bitmapStream)
-//                }
+                println("blabla")
+                bitmapStream = BitmapFactory.decodeStream(imgStream)
+                imageView.setImageBitmap(bitmapStream)
             }
         })
-
-        if (flag == 1) {
-            withContext(Main) {  imageView.setImageBitmap(bitmapStream) }
-        }
 
     }
 }
