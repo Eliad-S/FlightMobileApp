@@ -109,12 +109,13 @@ class SlidersActivity : AppCompatActivity(){
     private suspend fun imageRequest() {
         while(true) {
             getSimulatorScreen()
-            delay(1000)
+            delay(250)
         }
     }
 
     fun setCommand() {
-        val json: String = "{\n" + " \"aileron\": " + lastSendAileron + ",\n" + " \"rudder\": " + lastSendRudder + ",\n" + " \"elevator\": " + lastSendElevator + ",\n" + " \"throttle\": " + lastSendThrottle + "\n}"
+        val json: String =
+            "{\"aileron\": $lastSendAileron,\n \"rudder\": $lastSendRudder,\n \"elevator\": $lastSendElevator,\n \"throttle\": $lastSendThrottle\n}"
         val rb: RequestBody = RequestBody.create(MediaType.parse("application/json"), json)
         val gson = GsonBuilder()
             .setLenient()
