@@ -10,5 +10,5 @@
     <color name="white">#FFFFFF</color>
     <color name="mellowApricot">#FFBF69</color>
     <color name="orangePeel">#FF9F1C</color>
-
+    <color name="darkModeBackground">#222831</color>
 </resources>

@@ -35,7 +35,7 @@ public abstract class UrlRoomDatabase : RoomDatabase() {
 
             suspend fun populateDatabase(urlDao: UrlDao) {
                 // Delete all content here.
-                urlDao.deleteAll()
+                //urlDao.deleteAll()
 
                 // Add sample Urls.
 //                var url = Url("Hello")
