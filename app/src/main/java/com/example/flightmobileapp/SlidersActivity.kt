@@ -6,8 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.Toast
@@ -16,10 +14,8 @@ import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_sliders.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -29,7 +25,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.lang.Math.abs
 
 class SlidersActivity : AppCompatActivity(){
     // sliders
@@ -39,8 +34,6 @@ class SlidersActivity : AppCompatActivity(){
     private var lastSendRudder = 0.toDouble()
 
     // joystick
-    private var realAileron: Double = 0.toDouble()
-    private var realElevator: Double = 0.toDouble()
     private var lastSendAileron = 0.toDouble()
     private var lastSendElevator = 0.toDouble()
     private var url : String? = null
@@ -148,21 +141,21 @@ class SlidersActivity : AppCompatActivity(){
 
     private fun setJoystick() {
         joystickView.setOnMoveListener { angle, strength ->
-            val aileron = kotlin.math.cos(Math.toRadians(angle.toDouble())) * strength / 100
-            val elevator = kotlin.math.sin(Math.toRadians(angle.toDouble())) * strength / 100
-            aileronText.setText(aileron.toDouble().toString())
-            elevatorText.setText(elevator.toDouble().toString())
-            var difference = kotlin.math.abs(aileron - lastSendAileron)
+            val aileronValue = kotlin.math.cos(Math.toRadians(angle.toDouble())) * strength / 100
+            val elevatorValue = kotlin.math.sin(Math.toRadians(angle.toDouble())) * strength / 100
+            aileron.setText(aileronValue.toString())
+            elevator.setText(elevatorValue.toString())
+            var difference = kotlin.math.abs(aileronValue - lastSendAileron)
             var isChange = false
             if (difference / 2 > 0.01) {
                 // set aileron
-                lastSendAileron = aileron
+                lastSendAileron = aileronValue
                 isChange = true
             }
-            difference = kotlin.math.abs(elevator - lastSendElevator)
+            difference = kotlin.math.abs(elevatorValue - lastSendElevator)
             if (difference / 2 > 0.01) {
                 // set elevator
-                lastSendElevator = elevator
+                lastSendElevator = elevatorValue
                 isChange = true
             }
             if (isChange) {

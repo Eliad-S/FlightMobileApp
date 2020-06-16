@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.internal.bind.TypeAdapters.URL
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
@@ -37,7 +35,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun connectButtonOnClick(view: View) {
+        // the user url
         val editTextString = findViewById<EditText>(R.id.url_edit_text).text.toString()
+        // the user did not insert an url
         if (TextUtils.isEmpty(editTextString)) {
             Toast.makeText(this, "You did not enter a URL", Toast.LENGTH_SHORT).show()
         } else {
@@ -46,9 +46,10 @@ class MainActivity : AppCompatActivity() {
             urlViewModel.updateNumbers()
             val urlconnect : URL
             try {
+                // try connect
                 urlconnect = URL(editTextString)
                 var connect = urlconnect.openConnection() as HttpURLConnection
-
+                // create the second screen
                 val intent = Intent(this, SlidersActivity::class.java)
                 intent.putExtra("url", editTextString)
                 startActivity(intent)
