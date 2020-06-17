@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -207,10 +208,13 @@ class SlidersActivity : AppCompatActivity(){
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
-                val imgStream = response.body()?.byteStream()
-                println("blabla")
-                bitmapStream = BitmapFactory.decodeStream(imgStream)
-                imageView.setImageBitmap(bitmapStream)
+                val inputstream = response?.body()?.byteStream()
+                val bitmap = BitmapFactory.decodeStream(inputstream)
+                runOnUiThread {
+                    val imageView = findViewById<ImageView>(R.id.imageView)
+                    imageView.setImageBitmap(bitmap)
+                    println("debug:got image succsesfuly")
+                }
             }
         })
 
