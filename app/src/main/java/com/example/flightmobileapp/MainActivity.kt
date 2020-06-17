@@ -51,8 +51,6 @@ class MainActivity : AppCompatActivity() {
                 // try connect
                 urlconnect = URL(editTextString)
                 val connect : HttpURLConnection = urlconnect.openConnection() as HttpURLConnection
-                connect.readTimeout = 100 * 1000
-                connect.connect()
 
                 // create the second screen
                 val intent = Intent(this, SlidersActivity::class.java)
