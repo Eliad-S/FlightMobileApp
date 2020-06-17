@@ -37,11 +37,11 @@ class SlidersActivity : AppCompatActivity(){
     private var lastSendAileron = 0.toDouble()
     private var lastSendElevator = 0.toDouble()
     private var url : String? = null
+    private var changeImage = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sliders)
         url = getIntent().getStringExtra("url")
-        findViewById<Button>(R.id.button).setText(url)
         // back button to the main activity
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener{
@@ -94,15 +94,38 @@ class SlidersActivity : AppCompatActivity(){
             }
         })
         setJoystick()
-
-        CoroutineScope(IO).launch { imageRequest() }
+        onStart()
 
     }
 
-    private suspend fun imageRequest() {
-        while(true) {
-            getSimulatorScreen()
-            delay(250)
+    private fun imageRequest() {
+        changeImage = true
+        CoroutineScope(IO).launch {
+            while (changeImage) {
+                getSimulatorScreen()
+                delay(250)
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!changeImage) {
+            imageRequest()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!changeImage) {
+            imageRequest()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (changeImage) {
+            changeImage = false
         }
     }
 

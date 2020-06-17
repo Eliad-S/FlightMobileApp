@@ -1,4 +1,5 @@
 package com.example.flightmobileapp
+import Api
 import android.text.TextUtils
 import android.view.View
 import android.widget.Button
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.connect_button).setOnClickListener {
             connectButtonOnClick(it)
         }
+        onStart()
     }
 
     fun connectButtonOnClick(view: View) {
@@ -48,7 +50,10 @@ class MainActivity : AppCompatActivity() {
             try {
                 // try connect
                 urlconnect = URL(editTextString)
-                var connect = urlconnect.openConnection() as HttpURLConnection
+                val connect : HttpURLConnection = urlconnect.openConnection() as HttpURLConnection
+                connect.readTimeout = 100 * 1000
+                connect.connect()
+
                 // create the second screen
                 val intent = Intent(this, SlidersActivity::class.java)
                 intent.putExtra("url", editTextString)
