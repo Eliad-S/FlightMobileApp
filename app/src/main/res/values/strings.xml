@@ -2,26 +2,11 @@
     <string name="app_name">FlightMobileApp</string>
     <string name="edit_hint">Type URL...</string>
     <string name="connect_button">Connect</string>
-    <string name="first_server">1st server</string>
-    <string name="second_server">2st server</string>
-    <string name="third_server">3st server</string>
-    <string name="fourth_server">4st server</string>
-    <string name="fifth_server">5st server</string>
     <string name="title">Recently used servers</string>
-
-
-    <string name="angle_lab">Angle:</string>
-    <string name="power_lab">Power:</string>
-    <string name="direction_lab">Direc:</string>
-    <string name="none"></string>
-    <string name="front_lab">Front</string>
-    <string name="front_right_lab">Front-Right</string>
-    <string name="right_lab">Right</string>
-    <string name="right_bottom_lab">Right-Bottom</string>
-    <string name="bottom_lab">Bottom</string>
-    <string name="bottom_left_lab">Left-Bottom</string>
-    <string name="left_lab">Left</string>
-    <string name="left_front_lab">Front-Left</string>
-    <string name="center_lab">Center</string>
-    <string name="rights_lab">http://zerokol.com</string>
+    <string name="rudder">"Rudder:"</string>
+    <string name="throttle">"Throttle:"</string>
+    <string name="elevator">"Elevator:"</string>
+    <string name="aileron">"Aileron:"</string>
+    <string name="initialValue">0</string>
+    <string name="back_button">Back</string>
 </resources>

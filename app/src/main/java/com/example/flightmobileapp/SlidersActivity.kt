@@ -29,8 +29,6 @@ import java.io.IOException
 
 class SlidersActivity : AppCompatActivity(){
     // sliders
-    private var realThrottle: Double = 0.toDouble()
-    private var realRudder: Double = 0.toDouble()
     private var lastSendThrottle = 0.toDouble()
     private var lastSendRudder = 0.toDouble()
 
@@ -44,21 +42,23 @@ class SlidersActivity : AppCompatActivity(){
         setContentView(R.layout.activity_sliders)
         url = getIntent().getStringExtra("url")
         // back button to the main activity
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener{
+        val backButton = findViewById<Button>(R.id.buttonBack)
+        backButton.setOnClickListener{
+            onStop()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        // set a seekbar to the rudder
-        seekBar3.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        val seekbar = findViewById<SeekBar>(R.id.seekBarRudder)
+        seekbar.setProgress(seekbar.max / 2)
+        // set a seek bar to the rudder
+        findViewById<SeekBar>(R.id.seekBarRudder).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
-                val rudder = (i.toDouble() - 100) / 100
-                realRudder = rudder
-                textView5.text = "$rudder"
-                if (kotlin.math.abs(realRudder - lastSendRudder) >= 0.02) {
+                val rudderValue = (i.toDouble() - 100) / 100
+                rudder.text = "$rudderValue"
+                if (kotlin.math.abs(rudderValue - lastSendRudder) >= 0.02) {
                     // update server
-                    lastSendRudder = rudder
+                    lastSendRudder = rudderValue
                     CoroutineScope(IO).launch { setCommand() }
                 }
             }
@@ -71,17 +71,16 @@ class SlidersActivity : AppCompatActivity(){
                 // Do something
             }
         })
-        // set a seekbar to the throttle
-        seekBar4.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        // set a seek bar to the throttle
+        findViewById<SeekBar>(R.id.seekBarThrottle).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
-                val throttle = i.toDouble() / 100
-                throttleText.text = "$throttle"
-                realThrottle = throttle;
-                if (kotlin.math.abs(realThrottle - lastSendThrottle) >= 0.01) {
+                val throttleValue = i.toDouble() / 100
+                throttle.text = "$throttleValue"
+                if (kotlin.math.abs(throttleValue - lastSendThrottle) >= 0.01) {
                     // update server
-                    lastSendThrottle = realThrottle;
+                    lastSendThrottle = throttleValue
                     CoroutineScope(IO).launch { setCommand() }
                 }
             }
@@ -95,8 +94,8 @@ class SlidersActivity : AppCompatActivity(){
             }
         })
         setJoystick()
+        setCommand()
         onStart()
-
     }
 
     private fun imageRequest() {
@@ -130,6 +129,13 @@ class SlidersActivity : AppCompatActivity(){
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        changeImage = false
+    }
+
+
+
     fun setCommand() {
         val json: String =
             "{\"aileron\": $lastSendAileron,\n \"rudder\": $lastSendRudder,\n \"elevator\": $lastSendElevator,\n \"throttle\": $lastSendThrottle\n}"
@@ -144,6 +150,9 @@ class SlidersActivity : AppCompatActivity(){
         val api = retrofit.create(Api::class.java)
         val body = api.post(rb).enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(applicationContext, t.message,
+                    Toast.LENGTH_SHORT).show()
+                return
             }
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
@@ -190,7 +199,6 @@ class SlidersActivity : AppCompatActivity(){
 
 
     private  fun  getSimulatorScreen() {
-        var bitmapStream: Bitmap? = null
         val gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder().baseUrl(this.url.toString())
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
@@ -199,7 +207,7 @@ class SlidersActivity : AppCompatActivity(){
 
         api.getImg().enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(applicationContext, "Connection failed",
+                Toast.makeText(applicationContext, t.message,
                     Toast.LENGTH_SHORT).show()
                 return
             }

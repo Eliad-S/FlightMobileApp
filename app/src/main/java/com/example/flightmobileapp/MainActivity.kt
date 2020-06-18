@@ -1,20 +1,32 @@
 package com.example.flightmobileapp
 import Api
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.content.Intent
-import android.os.Bundle
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var urlViewModel: UrlViewModel
@@ -46,20 +58,59 @@ class MainActivity : AppCompatActivity() {
             val url = Url(editTextString)
             urlViewModel.insert(url)
             urlViewModel.updateNumbers()
-            val urlconnect : URL
             try {
-                // try connect
-                urlconnect = URL(editTextString)
-                val connect : HttpURLConnection = urlconnect.openConnection() as HttpURLConnection
+                val gson = GsonBuilder().setLenient().create()
+                val retrofit = Retrofit.Builder().baseUrl(editTextString)
+                    .addConverterFactory(GsonConverterFactory.create(gson)).build()
+                val api = retrofit.create(Api::class.java)
+                api.getImg().enqueue(object : Callback<ResponseBody> {
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Can't Connect, try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
 
-                // create the second screen
-                val intent = Intent(this, SlidersActivity::class.java)
-                intent.putExtra("url", editTextString)
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(this, "Can't Connect, try again", Toast.LENGTH_SHORT).show()
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        val inputstream = response.body()?.byteStream()
+                        val bitmap = BitmapFactory.decodeStream(inputstream)
+                        nextActivity(editTextString)
+                    }
+                })
+            } catch (e : Exception) {
+                Toast.makeText(
+                    applicationContext,
+                    "Can't Connect, try again",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+
+//            val urlconnect : URL
+//            try {
+//                // try connect
+//                urlconnect = URL(editTextString)
+//                val connect : HttpURLConnection = urlconnect.openConnection() as HttpURLConnection
+//
+//                // create the second screen
+//                val intent = Intent(this, SlidersActivity::class.java)
+//                intent.putExtra("url", editTextString)
+//                startActivity(intent)
+//            } catch (e: Exception) {
+//                Toast.makeText(this, "Can't Connect, try again", Toast.LENGTH_SHORT).show()
+//            }
         }
+    }
+
+    private fun nextActivity(url : String) {
+        // create the second screen
+        val intent = Intent(this, SlidersActivity::class.java)
+        intent.putExtra("url", url)
+        startActivity(intent)
     }
 
     fun updateEditText(url: Url) {
