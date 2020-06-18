@@ -2,6 +2,7 @@ package com.example.flightmobileapp
 
 import Api
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -31,10 +32,10 @@ class SlidersActivity : AppCompatActivity(){
     // sliders
     private var lastSendThrottle = 0.toDouble()
     private var lastSendRudder = 0.toDouble()
-
     // joystick
     private var lastSendAileron = 0.toDouble()
     private var lastSendElevator = 0.toDouble()
+
     private var url : String? = null
     private var changeImage = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +96,8 @@ class SlidersActivity : AppCompatActivity(){
         })
         setJoystick()
         setCommand()
-        onStart()
+        //onStart()
+        onStart();
     }
 
     private fun imageRequest() {
@@ -217,6 +219,12 @@ class SlidersActivity : AppCompatActivity(){
                 response: Response<ResponseBody>
             ) {
                 val inputstream = response?.body()?.byteStream()
+                println(response.message());
+                println(inputstream.toString());
+                println(response.errorBody().toString());
+                println(response.isSuccessful);
+                println(response.headers());
+
                 val bitmap = BitmapFactory.decodeStream(inputstream)
                 runOnUiThread {
                     val imageView = findViewById<ImageView>(R.id.imageView)
