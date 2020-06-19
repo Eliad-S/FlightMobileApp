@@ -2,15 +2,11 @@ package com.example.flightmobileapp
 
 import Api
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_sliders.*
@@ -26,7 +22,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.BufferedReader
 import java.io.IOException
+import java.io.InputStreamReader
+
 
 class SlidersActivity : AppCompatActivity(){
     // sliders
@@ -38,6 +37,8 @@ class SlidersActivity : AppCompatActivity(){
 
     private var url : String? = null
     private var changeImage = false
+    private lateinit var builder : AlertDialog.Builder
+    var alertDialog : AlertDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sliders)
@@ -96,8 +97,10 @@ class SlidersActivity : AppCompatActivity(){
         })
         setJoystick()
         setCommand()
-        //onStart()
-        onStart();
+        builder = AlertDialog.Builder(this)
+        setButtonsMessage()
+        alertDialog = builder.create()
+        onStart()
     }
 
     private fun imageRequest() {
@@ -152,11 +155,21 @@ class SlidersActivity : AppCompatActivity(){
         val api = retrofit.create(Api::class.java)
         val body = api.post(rb).enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                if (!changeImage) {
+                    return
+                }
                 Toast.makeText(applicationContext, t.message,
                     Toast.LENGTH_SHORT).show()
                 return
             }
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (!changeImage) {
+                    return
+                }
+                if (response.code() != 200) {
+                    val message = getResponseMessage(response)
+                    showMessage(message)
+                }
                 try {
                     Log.d("FlightMobileApp", response.body().toString())
                     println("make the update correctly")
@@ -170,6 +183,27 @@ class SlidersActivity : AppCompatActivity(){
         })
     }
 
+    fun showMessage(message : String) {
+        val dialogMessage: String = alertDialog?.findViewById<TextView>(android.R.id.message)?.text.toString()
+        val newMessage = message + "\nDo you want to return to the login screen?"
+        if (alertDialog?.isShowing == true && (dialogMessage == newMessage)) {
+            return
+        }
+        alertDialog = builder.setMessage(message + "\nDo you want to return to the login screen?").show()
+    }
+
+    fun setButtonsMessage() {
+        builder.setTitle("Androidly Alert")
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            onStop()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+
+        }
+    }
     protected override fun onDestroy() {
         super.onDestroy()
     }
@@ -209,6 +243,9 @@ class SlidersActivity : AppCompatActivity(){
 
         api.getImg().enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                if (!changeImage) {
+                    return
+                }
                 Toast.makeText(applicationContext, t.message,
                     Toast.LENGTH_SHORT).show()
                 return
@@ -218,13 +255,14 @@ class SlidersActivity : AppCompatActivity(){
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
+                if (!changeImage) {
+                    return
+                }
                 val inputstream = response?.body()?.byteStream()
-                println(response.message());
-                println(inputstream.toString());
-                println(response.errorBody().toString());
-                println(response.isSuccessful);
-                println(response.headers());
-
+                if (inputstream == null) {
+                    val message = getResponseMessage(response)
+                    showMessage(message)
+                }
                 val bitmap = BitmapFactory.decodeStream(inputstream)
                 runOnUiThread {
                     val imageView = findViewById<ImageView>(R.id.imageView)
@@ -234,5 +272,29 @@ class SlidersActivity : AppCompatActivity(){
             }
         })
 
+    }
+
+    companion object {
+        public fun getResponseMessage(response: Response<ResponseBody>): String {
+            var reader: BufferedReader? = null
+            val sb = StringBuilder()
+            try {
+                reader =
+                    BufferedReader(InputStreamReader(response.errorBody()!!.byteStream()))
+                var line: String?
+                try {
+                    while (reader.readLine().also { line = it } != null) {
+                        sb.append(line)
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            val finallyError = sb.toString()
+            return finallyError
+        }
     }
 }

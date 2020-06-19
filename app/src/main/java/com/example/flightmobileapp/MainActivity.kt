@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.connect_button).setOnClickListener {
             connectButtonOnClick(it)
         }
-        onStart()
     }
 
     fun connectButtonOnClick(view: View) {
@@ -54,7 +53,21 @@ class MainActivity : AppCompatActivity() {
             val url = Url(editTextString)
             urlViewModel.insert(url)
             urlViewModel.updateNumbers()
+            val pattern1 =
+                Regex("http?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%\\+.~#?&//=]*)")
+            val pattern2 = Regex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+#=]{2,256}\\:[0-9]{4,8}\\b([-a-zA-Z0-9@:%\\+.#?&//=]*)")
+            val result1 = pattern1.containsMatchIn(editTextString)
+            val result2 = pattern2.containsMatchIn(editTextString)
+            if (!result1 && !result2) {
+                Toast.makeText(
+                    applicationContext,
+                    "Can't Connect, try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
             try {
+                val okHttpClient = OkHttpClient()
                 val gson = GsonBuilder().setLenient().create()
                 val retrofit = Retrofit.Builder().baseUrl(editTextString)
                     .addConverterFactory(GsonConverterFactory.create(gson)).build()
@@ -85,20 +98,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
-//            val urlconnect : URL
-//            try {
-//                // try connect
-//                urlconnect = URL(editTextString)
-//                val connect : HttpURLConnection = urlconnect.openConnection() as HttpURLConnection
-//
-//                // create the second screen
-//                val intent = Intent(this, SlidersActivity::class.java)
-//                intent.putExtra("url", editTextString)
-//                startActivity(intent)
-//            } catch (e: Exception) {
-//                Toast.makeText(this, "Can't Connect, try again", Toast.LENGTH_SHORT).show()
-//            }
         }
     }
 
