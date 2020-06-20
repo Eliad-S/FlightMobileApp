@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.flightmobileapp.MainActivity.Companion.bitmap
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.coroutines.CoroutineScope
@@ -22,6 +23,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
+import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStreamReader
 
@@ -43,6 +45,10 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         url = getIntent().getStringExtra("url")
+        //set image.
+        val imageView = findViewById<ImageView>(R.id.imageView)
+        imageView.setImageBitmap(bitmap)
+
         // back button to the main activity
         setBackButton()
         // set a seek bar to the rudder

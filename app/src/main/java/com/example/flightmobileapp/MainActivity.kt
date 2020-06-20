@@ -2,6 +2,8 @@ package com.example.flightmobileapp
 
 import Api
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -20,9 +22,15 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
     private lateinit var urlViewModel: UrlViewModel
+    companion object {
+        lateinit var bitmap: Bitmap
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +97,18 @@ class MainActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    nextActivity(url)
+                    val inputStream = response.body()?.byteStream()
+                    bitmap = BitmapFactory.decodeStream(inputStream)
+
+                    if (inputStream != null) {
+                        nextActivity(url,inputStream)
+                    }else{
+                        Toast.makeText(
+                            applicationContext,
+                            "Can't get an image from the flight gear",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             })
         } catch (e : Exception) {
@@ -101,7 +120,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun nextActivity(url : String) {
+    private fun nextActivity(url : String, inputstream:InputStream) {
+        var line: String?
+        val sb = StringBuilder()
         // create the second screen
         val intent = Intent(this, GameActivity::class.java)
         intent.putExtra("url", url)
