@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = UrlListAdapter(this,{url: Url -> updateEditText(url)})
+        val adapter = UrlListAdapter(this) { url: Url -> updateEditText(url)}
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         urlViewModel = ViewModelProvider(this).get(UrlViewModel::class.java)

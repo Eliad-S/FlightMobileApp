@@ -38,20 +38,15 @@ class GameActivity : AppCompatActivity() {
     // joystick
     private var lastSendAileron = 0.toDouble()
     private var lastSendElevator = 0.toDouble()
-    // message box
-    private lateinit var builder : AlertDialog.Builder
-    var alertDialog : AlertDialog? = null
-    //var showErrorMessage = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        url = getIntent().getStringExtra("url")
+        url = intent.getStringExtra("url")
         //set image.
         val imageView = findViewById<ImageView>(R.id.imageView)
         imageView.setImageBitmap(bitmap)
 
-        // back button to the main activity
-        //setBackButton()
         // set a seek bar to the rudder
         setRudderSlider()
         // set a seek bar to the throttle
@@ -59,16 +54,12 @@ class GameActivity : AppCompatActivity() {
         setJoystick()
         // initialize the values
         setCommand()
-        // set error message box
-        builder = AlertDialog.Builder(this)
-        setButtonsMessage()
-        alertDialog = builder.create()
         onStart()
     }
 
     private fun setRudderSlider() {
         val seekbar = findViewById<SeekBar>(R.id.seekBarRudder)
-        seekbar.setProgress(seekbar.max / 2)
+        seekbar.progress = seekbar.max / 2
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
@@ -115,14 +106,6 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
-//    private fun setBackButton() {
-//        val backButton = findViewById<Button>(R.id.buttonBack)
-//        backButton.setOnClickListener{
-//            onStop()
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
 
     private fun imageRequest() {
         changeImage = true
@@ -198,29 +181,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun showMessage(message : String) {
-//        if (!showErrorMessage) {
-//            return
-//        }
-        val dialogMessage: String = alertDialog?.findViewById<TextView>(android.R.id.message)?.text.toString()
-        val newMessage = "$message\nDo you want to return to the login screen?"
-        if (alertDialog?.isShowing == true && (dialogMessage == newMessage)) {
-            return
-        }
-        alertDialog = builder.setMessage("$message\nDo you want to return to the login screen?").show()
-    }
-
-    fun setButtonsMessage() {
-        builder.setTitle("Error:")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            onStop()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-        }
-        builder.setNegativeButton("don't show again") { dialog, which ->
-           // showErrorMessage = false
-        }
+        Toast.makeText(applicationContext, message + "\nyou can return the login page",
+            Toast.LENGTH_SHORT).show()
     }
 
     protected override fun onDestroy() {
