@@ -79,6 +79,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun tryConnectToServer(url : String) {
         try {
+            Toast.makeText(
+                applicationContext,
+                "Logging...",
+                Toast.LENGTH_LONG
+            ).show()
             val gson = GsonBuilder().setLenient().create()
             val retrofit = Retrofit.Builder().baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create(gson)).build()
