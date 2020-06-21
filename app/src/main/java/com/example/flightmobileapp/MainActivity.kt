@@ -98,10 +98,11 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ResponseBody>
                 ) {
                     val inputStream = response.body()?.byteStream()
-                    bitmap = BitmapFactory.decodeStream(inputStream)
+
 
                     if (inputStream != null) {
-                        nextActivity(url,inputStream)
+                        bitmap = BitmapFactory.decodeStream(inputStream)
+                        nextActivity(url)
                     }else{
                         Toast.makeText(
                             applicationContext,
@@ -120,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun nextActivity(url : String, inputstream:InputStream) {
+    private fun nextActivity(url : String) {
         var line: String?
         val sb = StringBuilder()
         // create the second screen

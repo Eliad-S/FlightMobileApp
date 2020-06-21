@@ -14,8 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joystickView"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/joystickView" />
 
     <TextView
         android:id="@+id/rudderText"
@@ -29,8 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.421"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joystickView"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/joystickView" />
 
     <TextView
         android:id="@+id/rudder"
@@ -46,8 +44,7 @@
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toEndOf="@+id/rudderText"
         app:layout_constraintTop_toBottomOf="@+id/joystickView"
-        app:layout_constraintVertical_bias="0.533"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.533" />
 
     <SeekBar
         android:id="@+id/seekBarThrottle"
@@ -59,60 +56,45 @@
         app:layout_constraintEnd_toStartOf="@+id/joystickView"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/throttle"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/throttleText" />
 
     <TextView
         android:id="@+id/throttleText"
         android:layout_width="75dp"
         android:layout_height="26dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/throttle"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/throttle"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/throttle"
         android:layout_width="49dp"
         android:layout_height="24dp"
+        android:layout_marginBottom="285dp"
         android:gravity="center"
         android:text="@string/initialValue"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/throttleText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/throttleText"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="381dp"
-        android:layout_height="290dp"
+        android:layout_width="412dp"
+        android:layout_height="299dp"
         android:layout_marginBottom="26dp"
         app:layout_constraintBottom_toTopOf="@+id/throttleText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
-
-    <Button
-        android:id="@+id/buttonBack"
-        android:layout_width="72dp"
-        android:layout_height="34dp"
-        android:background="@color/mellowApricot"
-        android:shadowColor="#000000"
-        android:text="@string/back_button"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/elevatorText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.86"
-        app:layout_constraintStart_toEndOf="@+id/aileron"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.32999998" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/sym_def_app_icon"
+        android:contentDescription="@string/app_name"/>
 
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystickView"
@@ -174,7 +156,7 @@
         android:layout_width="54dp"
         android:layout_height="21dp"
         android:gravity="center"
-        android:text="0"
+        android:text="@string/initialValue"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/joystickView"

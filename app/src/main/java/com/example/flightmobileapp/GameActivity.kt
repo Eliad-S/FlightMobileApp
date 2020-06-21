@@ -26,6 +26,7 @@ import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStreamReader
+import kotlin.random.Random.Default.Companion
 
 
 class GameActivity : AppCompatActivity() {
@@ -40,7 +41,7 @@ class GameActivity : AppCompatActivity() {
     // message box
     private lateinit var builder : AlertDialog.Builder
     var alertDialog : AlertDialog? = null
-
+    //var showErrorMessage = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -50,7 +51,7 @@ class GameActivity : AppCompatActivity() {
         imageView.setImageBitmap(bitmap)
 
         // back button to the main activity
-        setBackButton()
+        //setBackButton()
         // set a seek bar to the rudder
         setRudderSlider()
         // set a seek bar to the throttle
@@ -114,14 +115,14 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
-    private fun setBackButton() {
-        val backButton = findViewById<Button>(R.id.buttonBack)
-        backButton.setOnClickListener{
-            onStop()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-    }
+//    private fun setBackButton() {
+//        val backButton = findViewById<Button>(R.id.buttonBack)
+//        backButton.setOnClickListener{
+//            onStop()
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 
     private fun imageRequest() {
         changeImage = true
@@ -176,7 +177,7 @@ class GameActivity : AppCompatActivity() {
                 if (!changeImage) {
                     return
                 }
-                Toast.makeText(applicationContext, t.message,
+                Toast.makeText(applicationContext, "Failed to ",
                     Toast.LENGTH_SHORT).show()
                 return
             }
@@ -186,6 +187,10 @@ class GameActivity : AppCompatActivity() {
                 }
                 if (response.code() != 200) {
                     val message = getResponseMessage(response)
+                        if (message == "Failed to update command") {
+                        Toast.makeText(applicationContext, message,
+                            Toast.LENGTH_SHORT).show()
+                    }
                     showMessage(message)
                 }
             }
@@ -193,6 +198,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun showMessage(message : String) {
+//        if (!showErrorMessage) {
+//            return
+//        }
         val dialogMessage: String = alertDialog?.findViewById<TextView>(android.R.id.message)?.text.toString()
         val newMessage = "$message\nDo you want to return to the login screen?"
         if (alertDialog?.isShowing == true && (dialogMessage == newMessage)) {
@@ -202,13 +210,16 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun setButtonsMessage() {
-        builder.setTitle("Androidly Alert")
+        builder.setTitle("Error:")
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
             onStop()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
         builder.setNegativeButton(android.R.string.no) { dialog, which ->
+        }
+        builder.setNegativeButton("don't show again") { dialog, which ->
+           // showErrorMessage = false
         }
     }
 
@@ -254,8 +265,12 @@ class GameActivity : AppCompatActivity() {
                 if (!changeImage) {
                     return
                 }
-                Toast.makeText(applicationContext, t.message,
-                    Toast.LENGTH_SHORT).show()
+                if (t.message?.contains("timeout") == true) {
+                    Toast.makeText(applicationContext, "Timeout request",
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    showMessage("Connection failed")
+                }
                 return
             }
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
